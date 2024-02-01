@@ -1,21 +1,14 @@
 import React from 'react';
-import {Text} from 'react-native';
-import { StyleSheet, View } from 'react-native';
-import MapView from 'react-native-maps';
-import {Marker} from 'react-native-maps';
+import {StyleSheet, View} from 'react-native';
+import MapView, { Marker} from 'react-native-maps';
+import GetLocation from 'react-native-get-location';
 
 import data from './data/producers_22.json';
 
+
 class MyMap extends React.Component {
-	render0() {
-		return (
-			<View style={styles.container}>
-				<Text>Hello, Alberic!</Text>
-			</View>
-		);
-	}
 	constructor(props) {
-		console.log("new HelloWorld");
+		console.log("new MyMap");
 		super(props);
 		this.state = {
 			region: {
@@ -26,6 +19,22 @@ class MyMap extends React.Component {
 			},
 			markers: data.producers
 		};
+		this.centerOnMyPosition ();
+	}
+	centerOnMyPosition () {
+		GetLocation.getCurrentPosition({
+			// enableHighAccuracy: true,
+			timeout: 60000,
+		})
+		.then(location => {
+			console.log("Location is : ",location);
+			this.state.region.latitude = location.latitude;
+			this.state.region.longitude = location.longitude;
+		})
+		.catch(error => {
+			const { code, message } = error;
+			console.warn(code, message);
+		});
 	}
 	onRegionChange(aNewRegion) {
 		console.log(aNewRegion);
@@ -49,8 +58,8 @@ class MyMap extends React.Component {
 		);
 	}
 };
-export default MyMap;
 
+export default MyMap;
 
 const styles = StyleSheet.create({
 	container: {
@@ -63,3 +72,4 @@ const styles = StyleSheet.create({
 	  height: '100%',
 	},
   });
+

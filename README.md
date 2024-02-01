@@ -14,7 +14,10 @@ https://docs.expo.dev/workflow/android-studio-emulator/
 
 > npx react-native@latest init openproduct-app
 
-> npm i @expo/metro-config
+> npm install @react-navigation/drawer
+> npm install @react-native-picker/picker
+> npm install @react-navigation/native-stack
+> npm install @expo/metro-config
 
 # Install on Androïd
 
