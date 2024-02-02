@@ -4,7 +4,7 @@ import {StyleSheet, View} from 'react-native';
 // https://www.npmjs.com/package/react-native-picker-select
 import RNPickerSelect from 'react-native-picker-select';
 
-import categories from './data/categories.json';
+import categories from '../assets/data/categories.json';
 selectOptions = [];
 for (cat of categories) {
 	selectOptions.push({label:cat.text, value:cat.val})

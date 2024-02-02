@@ -1,7 +1,7 @@
-import MyMap from './MyMap.js';
-import Parameters from './Parameters.js'
-import HelpView from './HelpView.js'
-import WikiView from './WikiView.js'
+import MyMap from './components/MyMap.js';
+import Parameters from './components/Parameters.js'
+import HelpView from './components/HelpView.js'
+import WikiView from './components/WikiView.js'
 
 // import {createDrawerNavigator} from '@react-native/drawer'
 // https://reactnavigation.org/docs/hello-react-navigation

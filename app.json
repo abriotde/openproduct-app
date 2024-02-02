@@ -4,7 +4,7 @@
     "slug": "openproduct-app",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/logoOpenProduct.png",
     "userInterfaceStyle": "light",
     "splash": {
       "image": "./assets/splash.png",
@@ -19,12 +19,12 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
+        "foregroundImage": "./assets/logoOpenProduct.png",
         "backgroundColor": "#ffffff"
       }
     },
     "web": {
-      "favicon": "./assets/favicon.png"
+      "favicon": "./assets/logoOpenProduct.png"
     }
   }
 }

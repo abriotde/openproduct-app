@@ -10,14 +10,17 @@ https://docs.expo.dev/workflow/android-studio-emulator/
 // https://reactnative.dev/docs/environment-setup
 
 > npx create-expo-app openproduct-app
-> npx expo start
-
 > npx react-native@latest init openproduct-app
+> npx expo start
 
 > npm install @react-navigation/drawer
 > npm install @react-native-picker/picker
 > npm install @react-navigation/native-stack
 > npm install @expo/metro-config
+> npx expo install expo-file-system
+// https://github.com/itinance/react-native-fs
+> npm install react-native-fs --save
+// https://medium.com/@yangguang200906/load-local-assets-in-react-native-9e5787fc70e1
 
 # Install on Androïd
 
