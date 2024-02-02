@@ -48,6 +48,7 @@ class MyMap extends React.Component {
 			markers: [],
 			loadedAreas: [],
 			areasToCheck: [],
+			hasAreasToCheck: false,
 			producers: {},
 			myfilter: noFilter
 		};
@@ -67,11 +68,8 @@ class MyMap extends React.Component {
 			// console.log("Remove marker")
 			// TODO map.removeLayer(this.state.markers[key]);
 		}
-		var st = this.state;
-		st.markers = [];
-		st.producers = {};
-		st.areasToCheck = [];
-		st.loadedAreas = [];
+		areasToCheck = [];
+		loadedAreas = [];
 		// TODO this.setState(st);
 		areaNumber = this.getMainArea();
 		if (areaNumber>0) {
@@ -87,46 +85,41 @@ class MyMap extends React.Component {
 		}
 		loadedAreas = this.state.loadedAreas;
 		for(area of areas) {
-			if(DEBUG) console.log("getProducers(",area,")");
-			const producersPath = "data/producers_"+area+".json";
-			// const producers = require(producersPath);
-			/* const producers = RNFS.readFile(producersPath, 'utf8')
-			.then((res) => {
-				const producers2 = JSON.parse(res); 
-				console.log("producers2:",producers2);
-			}); */
-			// let asset = await AssetUtils.resolveAsync(INDEX_FILE_PATH);
-			const producers = await fetch('https://openproduct.freeboxos.fr/'+producersPath /*, {
-				method: 'POST',
-				headers: {
-				  Accept: 'application/json',
-				  'Content-Type': 'application/json'
-				}
-			} */
-			)
-			.then((response) => {
-				console.log(response);
-				return response.json();
-			})
-			.then((json) => this.displayProducers(elem, json.producers))
-			.catch(error => {
-				console.log("errorFetch:",error);
-			});
-			// console.log(FileSystem.bundleDirectory);
-			// console.log(FileSystem.documentDirectory);
-			/* FileSystem.readAsStringAsync(
-				producersPath,
-				{length:128000}
-			)
-			.then(data => {
-				console.log("data:",data);
-			})
-			.catch(error => {
-				console.log("error:",error);
-			}); */
-			loadedAreas.push(area);
+			if (!loadedAreas.includes(area)) {
+				loadedAreas.push(area);
+				if(DEBUG) console.log("getProducers(",area,")");
+				const producersPath = "data/producers_"+area+".json";
+				// const producers = require(producersPath);
+				/* const producers = RNFS.readFile(producersPath, 'utf8')
+				.then((res) => {
+					const producers2 = JSON.parse(res); 
+					console.log("producers2:",producers2);
+				}); */
+				// let asset = await AssetUtils.resolveAsync(INDEX_FILE_PATH);
+				const producers = await fetch('https://openproduct.freeboxos.fr/'+producersPath)
+				.then((response) => {
+					console.log("response:",response);
+					return response.json();
+				})
+				.then((json) => this.displayProducers(elem, json.producers))
+				.catch(error => {
+					console.log("errorFetch:",error);
+				});
+				// console.log(FileSystem.bundleDirectory);
+				// console.log(FileSystem.documentDirectory);
+				/* FileSystem.readAsStringAsync(
+					producersPath,
+					{length:128000}
+				)
+				.then(data => {
+					console.log("data:",data);
+				})
+				.catch(error => {
+					console.log("error:",error);
+				}); */
+			}
 		}
-		this.setState({loadedAreas:loadedAreas})
+		this.setState({loadedAreas:loadedAreas, areasToCheck:areasToCheck, hasAreasToCheck:true});
 		this.checkNeighbouring(elem);
 	}
 	displayProducers(elem, producers) {
@@ -184,10 +177,10 @@ class MyMap extends React.Component {
 	checkNeighbouring(elem) {
 		if(DEBUG) console.log("checkNeighbouring(",elem.state.areasToCheck,")");
 
-		if (elem.state.areasToCheck.length>0) { // Neighbouring has change only if we have loaded more producers
+		if (this.state.hasAreasToCheck) { // Neighbouring has change only if we have loaded more producers
 			this.refreshAreasToCheck();
 		}
-	
+
 		// Check strategic points.
 		var toLoad = [];
 		const region = this.state.region;
@@ -220,7 +213,7 @@ class MyMap extends React.Component {
 		if (toLoad.length>0) {
 			if(DEBUG) console.log("checkNeighbouring() : need to load : ",toLoad, " from ", this.state.areasToCheck,
 			"; loadedAreas=",elem.state.loadedAreas)
-			this.getAllProducers(toLoad);
+			this.getAllProducers(elem, toLoad);
 		} 
 	}
 	centerOnMyPosition () {
@@ -310,10 +303,10 @@ class MyMap extends React.Component {
 	    if(DEBUG) console.log("Neighbours:",neighbours);
 		// Remove neigbours ever loaded.
 		var areasToCheck = neighbours.filter(x => !this.state.loadedAreas.includes(x));
-		this.setState({areasToCheck:areasToCheck});
+		this.setState({areasToCheck:areasToCheck, hasAreasToCheck:false});
 		if(DEBUG) console.log("AreasToCheck:",this.state.areasToCheck, "; loadedAreas=",this.state.loadedAreas);
 	}
-	onRegionChange(elem, aNewRegion) {
+	regionChange(elem, aNewRegion) {
 		if(DEBUG) console.log("onRegionChange(",")");
 		this.checkNeighbouring(elem);
 	}
@@ -322,7 +315,7 @@ class MyMap extends React.Component {
 		  <View style={styles.container}>
 			<MapView style={styles.map}
 					region={this.state.region}
-					onRegionChange={this.onRegionChange(this)}
+					onRegionChange={this.regionChange(this)}
 					onMapReady={this.checkNeighbouring(this)}>
 				{this.state.markers.map((marker, index) => (
 				<Marker
