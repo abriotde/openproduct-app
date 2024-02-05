@@ -2,7 +2,7 @@ import React from 'react';
 import {StyleSheet, View, ScrollView, Text} from 'react-native';
 import MapView, { Marker} from 'react-native-maps';
 import GetLocation from 'react-native-get-location';
-import LaunchNavigator from 'react-native-launch-navigator'
+// import LaunchNavigator from 'react-native-launch-navigator'
 import * as FileSystem from 'expo-file-system';
 import { Asset } from "expo-asset";
 // import AssetUtils from "expo-asset-utils";
@@ -37,7 +37,7 @@ const DEBUG = true;
 class MyMap extends React.Component {
 	constructor(props) {
 		// https://legacy.reactjs.org/docs/hooks-faq.html#is-there-something-like-instance-variables
-		console.log("new MyMap");
+		console.log("new MyMap(",props,")");
 		super(props);
 		this.state = {
 			region: {
@@ -53,7 +53,8 @@ class MyMap extends React.Component {
 			producers: {},
 			myfilter: noFilter,
 			mainProducer: {},
-			diplayMainProducer: false
+			diplayMainProducer: false,
+			navigation:props.navigation
 		};
 		this.centerOnMyPosition ();
 		if(DEBUG) console.log("new MyMap(",this.state.areasToCheck,")");
@@ -315,27 +316,14 @@ class MyMap extends React.Component {
 	}
 	regionChange(elem, aNewRegion) {
 		if(DEBUG) console.log("onRegionChange(",")");
-		this.setState({diplayMainProducer:false});
-		this.checkNeighbouring(elem);
+		// this.setState({diplayMainProducer:false}); // Pb : onMarkerPress() => regionChange() for center the map.
+		// this.checkNeighbouring(elem);
 	}
 	onMarkerPress(marker) {
-		console.log("onMarkerPress(",marker,")");
+		console.log("onMarkerPress(",marker,"):");
 		this.setState({diplayMainProducer:true, mainProducer:marker});
-		/* LaunchNavigator.navigate([50.279306, -5.163158], {
-			start: "50.342847, -4.749904"
-		})
-		.then(() => console.log("Launched navigator"))
-		.catch((err) => console.error("Error launching navigator: "+err));
-		*/
+		this.state.navigation.navigate('Producer');
 	}
-	/*
-			(this.state.diplayMainProducer &&
-				<ScrollView style={styles.markerPopup}>
-					<Text h2>{this.state.mainProducer.name}</Text>
-					<Text>{this.state.mainProducer.txt}</Text>
-				</ScrollView>
-			)
-	*/
 	render() {
 		return (
 		  <View style={styles.container}>
@@ -349,7 +337,7 @@ class MyMap extends React.Component {
 					coordinate={{latitude: marker.lat, longitude: marker.lng}}
 					title={marker.name}
 					description={marker.txt}
-					onPress={() => onMarkerPress(marker)}
+					onPress={() => this.onMarkerPress(marker)}
 				/>
 				))}
 			</MapView>
