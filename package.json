@@ -12,6 +12,7 @@
     "@expo/metro-config": "^0.17.3",
     "@expo/metro-runtime": "~3.1.1",
     "@react-native-community/cli": "^13.5.1",
+    "@react-native-masked-view/masked-view": "0.3.0",
     "@react-native-picker/picker": "^2.6.1",
     "@react-native/metro-config": "^0.73.4",
     "@react-navigation/drawer": "^6.6.6",
@@ -31,6 +32,7 @@
     "react-native-get-location": "^4.0.1",
     "react-native-launch-navigator": "^1.0.9",
     "react-native-link": "^4.1.0",
+    "react-native-map-link": "^2.11.4",
     "react-native-maps": "1.8.0",
     "react-native-picker-select": "^9.0.1",
     "react-native-reanimated": "^3.6.2",
@@ -40,8 +42,7 @@
     "react-native-vector-icons": "^10.0.3",
     "react-native-web": "~0.19.6",
     "react-native-webview": "13.6.4",
-    "typescript": "^5.3.0",
-    "@react-native-masked-view/masked-view": "0.3.0"
+    "typescript": "^5.3.0"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

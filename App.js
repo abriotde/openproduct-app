@@ -23,6 +23,7 @@ function MapPage({ navigation }) {
 		<Stack.Navigator initialRouteName="Map">
 			<Stack.Screen name="Map" component={MyMap} navigation={navigation} options={{headerShown: false}} />
 			<Stack.Screen name="Producer" component={ProducerPage} navigation={navigation} />
+			<Stack.Screen name="Wiki" component={WikiView} navigation={navigation} />
 		</Stack.Navigator>
 	);
   }

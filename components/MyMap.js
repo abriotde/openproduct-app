@@ -322,7 +322,7 @@ class MyMap extends React.Component {
 	onMarkerPress(marker) {
 		console.log("onMarkerPress(",marker,"):");
 		this.setState({diplayMainProducer:true, mainProducer:marker});
-		this.state.navigation.navigate('Producer');
+		this.state.navigation.navigate('Producer', {producer:marker, navigation:this.state.navigation});
 	}
 	render() {
 		return (
