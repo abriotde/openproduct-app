@@ -324,6 +324,26 @@ class MyMap extends React.Component {
 		this.setState({diplayMainProducer:true, mainProducer:marker});
 		this.state.navigation.navigate('Producer', {producer:marker, navigation:this.state.navigation});
 	}
+	getMarkerColor(producer) {
+		console.log("getMarkerColor(",producer,")")
+		var cat = producer.cat;
+		if (cat==null) {
+			return "#000000"; // Black
+		}
+		if (cat[0]=="H") {
+			return "#fcba03"; // Yellow
+		}
+		if (cat[0]=="P") {
+			return "#fcba03"; // Red
+		}
+		if (cat[0]=="J") {
+			return "#0a6b1d"; // Green
+		}
+		if (cat[0]=="O") {
+			return "#0a106b"; // Blue
+		}
+		return "#000000"; // Black
+	}
 	render() {
 		return (
 		  <View style={styles.container}>
@@ -338,6 +358,7 @@ class MyMap extends React.Component {
 					title={marker.name}
 					description={marker.txt}
 					onPress={() => this.onMarkerPress(marker)}
+					pinColor={this.getMarkerColor(marker)}
 				/>
 				))}
 			</MapView>
