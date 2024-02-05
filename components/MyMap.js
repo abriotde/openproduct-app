@@ -1,7 +1,8 @@
 import React from 'react';
-import {StyleSheet, View} from 'react-native';
+import {StyleSheet, View, ScrollView, Text} from 'react-native';
 import MapView, { Marker} from 'react-native-maps';
 import GetLocation from 'react-native-get-location';
+import LaunchNavigator from 'react-native-launch-navigator'
 import * as FileSystem from 'expo-file-system';
 import { Asset } from "expo-asset";
 // import AssetUtils from "expo-asset-utils";
@@ -50,7 +51,9 @@ class MyMap extends React.Component {
 			areasToCheck: [],
 			hasAreasToCheck: false,
 			producers: {},
-			myfilter: noFilter
+			myfilter: noFilter,
+			mainProducer: {},
+			diplayMainProducer: false
 		};
 		this.centerOnMyPosition ();
 		if(DEBUG) console.log("new MyMap(",this.state.areasToCheck,")");
@@ -175,10 +178,14 @@ class MyMap extends React.Component {
 				&& area.min[1]<point.lng && area.max[1]>point.lng;
 	}
 	checkNeighbouring(elem) {
-		if(DEBUG) console.log("checkNeighbouring(",elem.state.areasToCheck,")");
+		if(DEBUG) console.log("checkNeighbouring(",this.state.hasAreasToCheck, elem.state.areasToCheck,")");
 
 		if (this.state.hasAreasToCheck) { // Neighbouring has change only if we have loaded more producers
 			this.refreshAreasToCheck();
+		}
+		if(elem.state.areasToCheck.length<=0) {
+			if(DEBUG) console.log("checkNeighbouring() => cancel.")
+			return;
 		}
 
 		// Check strategic points.
@@ -308,8 +315,27 @@ class MyMap extends React.Component {
 	}
 	regionChange(elem, aNewRegion) {
 		if(DEBUG) console.log("onRegionChange(",")");
+		this.setState({diplayMainProducer:false});
 		this.checkNeighbouring(elem);
 	}
+	onMarkerPress(marker) {
+		console.log("onMarkerPress(",marker,")");
+		this.setState({diplayMainProducer:true, mainProducer:marker});
+		/* LaunchNavigator.navigate([50.279306, -5.163158], {
+			start: "50.342847, -4.749904"
+		})
+		.then(() => console.log("Launched navigator"))
+		.catch((err) => console.error("Error launching navigator: "+err));
+		*/
+	}
+	/*
+			(this.state.diplayMainProducer &&
+				<ScrollView style={styles.markerPopup}>
+					<Text h2>{this.state.mainProducer.name}</Text>
+					<Text>{this.state.mainProducer.txt}</Text>
+				</ScrollView>
+			)
+	*/
 	render() {
 		return (
 		  <View style={styles.container}>
@@ -323,6 +349,7 @@ class MyMap extends React.Component {
 					coordinate={{latitude: marker.lat, longitude: marker.lng}}
 					title={marker.name}
 					description={marker.txt}
+					onPress={() => onMarkerPress(marker)}
 				/>
 				))}
 			</MapView>
@@ -342,6 +369,10 @@ const styles = StyleSheet.create({
 	map: {
 	  width: '100%',
 	  height: '100%',
+	},
+	markerPopup: {
+	  width: '100%',
+	  height: '50%',
 	},
   });
 

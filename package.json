@@ -28,6 +28,7 @@
     "react-native-fs": "^2.20.0",
     "react-native-gesture-handler": "^2.14.1",
     "react-native-get-location": "^4.0.1",
+    "react-native-launch-navigator": "^1.0.9",
     "react-native-link": "^4.1.0",
     "react-native-maps": "1.8.0",
     "react-native-picker-select": "^9.0.1",
