@@ -54,24 +54,27 @@ class ProducerPage extends React.Component {
 	render() {
 		return (
 		  <ScrollView>
-			<Text h1>{this.state.producer.name}</Text>
-			<Text>Description: {this.state.producer.txt}</Text>
-			<Text>Email: {this.state.producer.email}</Text>
-			<Text>Téléphone: {this.state.producer.tel}</Text>
-			<Text>Site web:</Text><Button onPress={() => this.openWeb(this)} title={this.state.producer.web} />
-			<Text>Wiki:</Text><Button onPress={() => this.openWiki(this)} title="Wiki" />
-			<Text>Addresse: {this.state.producer.addr} {this.state.producer.postCode} {this.state.producer.city}</Text>
-			<Button onPress={() => this.openGps(this)} title="Ouvrir dans le GPS" />
+			<Text h1 style={styles.header1Text}>{this.state.producer.name}</Text>
+			<Text><Text>{this.state.producer.txt}</Text></Text>
+			<Text><Text style={styles.titleText}>Email: </Text><Text>{this.state.producer.email}</Text></Text>
+			<Text><Text style={styles.titleText}>Téléphone: </Text><Text>{this.state.producer.tel}</Text></Text>
+			{this.state.producer.web!="" && <Text><Text style={styles.titleText}>Site web:</Text><Button onPress={() => this.openWeb(this)} title={this.state.producer.web} /></Text>}
+			{this.state.producer.wiki!=null && (<Text><Text style={styles.titleText}>Wiki:</Text><Button onPress={() => this.openWiki(this)} title="Wiki" /></Text>)}
+			<Text><Text style={styles.titleText}>Addresse: </Text><Text>{this.state.producer.addr} {this.state.producer.postCode} {this.state.producer.city}</Text></Text>
+			<Text><Button onPress={() => this.openGps(this)} title="Ouvrir dans le GPS" /></Text>
 		  </ScrollView>
 		);
 	}
 };
 const styles = StyleSheet.create({
-	container: {
-	  flex: 1,
-	  justifyContent: 'center',
-	  alignItems: 'center',
+	header1Text: {
+		fontSize: 20,
+		fontWeight: 'bold',
+	},
+	titleText: {
+		fontWeight: 'bold',
+		display:'inline'
 	}
-  });
+});
 
 export default ProducerPage;
