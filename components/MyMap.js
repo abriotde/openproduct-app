@@ -2,7 +2,6 @@ import React from 'react';
 import {StyleSheet, View, ScrollView, Text} from 'react-native';
 import MapView, { Marker} from 'react-native-maps';
 import GetLocation from 'react-native-get-location';
-// import LaunchNavigator from 'react-native-launch-navigator'
 import * as FileSystem from 'expo-file-system';
 import { Asset } from "expo-asset";
 // import AssetUtils from "expo-asset-utils";
@@ -13,10 +12,10 @@ var filterChar = "a";
 var charFilter = function (producer) {
     if(producer && producer.cat!=null) {
         return producer.cat.charAt(0)==filterChar;
-    } else {  
+    } else {
         return false;
-    }               
-}               
+    }
+}
 var twoCharFilter = function (producer) {
     if(producer && producer.cat!=null && producer.cat.charAt(0)==filterChar.charAt(0)) {
         var subfilter = filterChar.charAt(1); 
@@ -129,7 +128,6 @@ class MyMap extends React.Component {
 		if(DEBUG) console.log("displayProducers(",producers[0].postCode," (",producers.length,"))");
 		var allProducers = this.state.producers;
 		var visibleMarkers = [];
-		if(DEBUG) console.log("displayProducers(producers=",producers.length,")");
 		for (const producer of producers) {
 			if (producer!=undefined) { 
 				var key = "m"+producer.lat+"_"+producer.lng;
@@ -138,7 +136,6 @@ class MyMap extends React.Component {
 				console.log("Error : displayProducers() : producer==undefined.");
 			}
 		}
-		if(DEBUG) console.log("displayProducers(allProducers=",")");
 		for (key in allProducers) {
 			var producer = allProducers[key];
 			if (this.state.myfilter(producer)) {
@@ -196,8 +193,10 @@ class MyMap extends React.Component {
 			northEast = {lat:region.latitude+region.latitudeDelta, lng:region.longitude+region.longitudeDelta},
 			southWest = {lat:region.latitude-region.latitudeDelta, lng:region.longitude-region.longitudeDelta},
 			southEast = {lat:region.latitude-region.latitudeDelta, lng:region.longitude+region.longitudeDelta};
+		// console.log("checkNeighbouring() : region = ",region,"; points = [",northWest, northEast, southEast, southWest,"]");
 		for (areaId of elem.state.areasToCheck) {
 			var area = AreasList[areaId];
+			// console.log("checkNeighbouring() : Area =", areaId, area);
 			if(this.isInArea(area, center)) { // Should be unnecessary [48.533839, 1.526993]
 				// console.log("checkNeighbouring() : center in ",areaId,area);
 				toLoad.push(areaId);
@@ -313,9 +312,9 @@ class MyMap extends React.Component {
 		this.setState({areasToCheck:areasToCheck, hasAreasToCheck:false});
 		if(DEBUG) console.log("AreasToCheck:",this.state.areasToCheck, "; loadedAreas=",this.state.loadedAreas);
 	}
-	regionChange(aNewRegion) {
+	regionChange(elem, aNewRegion) {
 		if(DEBUG) console.log("regionChange(",aNewRegion,")");
-		this.setState({diplayMainProducer:false}); // Pb : onMarkerPress() => regionChange() for center the map.
+		this.setState({diplayMainProducer:false, region:aNewRegion}); // Pb : onMarkerPress() => regionChange() for center the map.
 		this.checkNeighbouring(this);
 	}
 	onMarkerPress(marker) {
@@ -348,7 +347,7 @@ class MyMap extends React.Component {
 		  <View style={styles.container}>
 			<MapView style={styles.map}
 					region={this.state.region}
-					onRegionChange={() => this.regionChange()}
+					onRegionChangeComplete={(aNewRegion) => this.regionChange(this, aNewRegion)}
 					onMapReady={() => this.checkNeighbouring(this)}>
 				{this.state.markers.map((marker, index) => (
 				<Marker
