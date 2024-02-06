@@ -20,10 +20,10 @@ const Drawer = createDrawerNavigator();
 const Stack = createStackNavigator();
 function MapPage({ navigation }) {
 	return (
-		<Stack.Navigator initialRouteName="Map">
-			<Stack.Screen name="Map" component={MyMap} navigation={navigation} options={{headerShown: false}} />
+		<Stack.Navigator initialRouteName="ProducerMap">
+			<Stack.Screen name="ProducerMap" component={MyMap} navigation={navigation} options={{headerShown: false}} />
 			<Stack.Screen name="Producer" component={ProducerPage} navigation={navigation} />
-			<Stack.Screen name="Wiki" component={WikiView} navigation={navigation} />
+			<Stack.Screen name="ProducerWiki" component={WikiView} navigation={navigation} />
 		</Stack.Navigator>
 	);
   }

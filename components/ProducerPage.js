@@ -43,7 +43,7 @@ class ProducerPage extends React.Component {
 	}
 	openWiki(elem) {
 		console.log("openWiki(",elem.state.producer.wiki,")");
-		elem.state.navigation.navigate("Wiki", {title:elem.state.producer.wiki});
+		elem.state.navigation.navigate("ProducerWiki", {title:elem.state.producer.wiki});
 	}
 	openWeb(elem) {
 		console.log("openWeb(",elem.state.producer.web,")");

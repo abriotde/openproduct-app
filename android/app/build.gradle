@@ -94,11 +94,11 @@ android {
         }
         release {
             storeFile file('openproduct.keystore')
-			storePassword System.console().readLine("\nKeystore password:")
-			// storePassword 'XXXXXXXXXXXXXX'
+			// storePassword System.console().readLine("\nKeystore password:")
+			storePassword 'KewBEQ+wvolR6jcN'
             keyAlias 'OpenProduct'
-			keyPassword System.console().readLine("\nAlias password: ")
-			// keyPassword 'XXXXXXXXXXXXXX'
+			// keyPassword System.console().readLine("\nAlias password: ")
+			keyPassword 'KewBEQ+wvolR6jcN'
         }
     }
     buildTypes {

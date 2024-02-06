@@ -37,7 +37,7 @@ const DEBUG = true;
 class MyMap extends React.Component {
 	constructor(props) {
 		// https://legacy.reactjs.org/docs/hooks-faq.html#is-there-something-like-instance-variables
-		console.log("new MyMap(",props,")");
+		if(DEBUG) console.log("new MyMap(",")");
 		super(props);
 		this.state = {
 			region: {
@@ -57,7 +57,6 @@ class MyMap extends React.Component {
 			navigation:props.navigation
 		};
 		this.centerOnMyPosition ();
-		if(DEBUG) console.log("new MyMap(",this.state.areasToCheck,")");
 	}
 	centerMap (elem, latitude, longitude) {
 		if(DEBUG) console.log("centerMap (",latitude,",", longitude,")");
@@ -102,7 +101,7 @@ class MyMap extends React.Component {
 				// let asset = await AssetUtils.resolveAsync(INDEX_FILE_PATH);
 				const producers = await fetch('https://openproduct.freeboxos.fr/'+producersPath)
 				.then((response) => {
-					console.log("response:",response);
+					// console.log("response:",response);
 					return response.json();
 				})
 				.then((json) => this.displayProducers(elem, json.producers))
@@ -127,7 +126,7 @@ class MyMap extends React.Component {
 		this.checkNeighbouring(elem);
 	}
 	displayProducers(elem, producers) {
-		if(DEBUG) console.log("displayProducers(",producers.length,")");
+		if(DEBUG) console.log("displayProducers(",producers[0].postCode," (",producers.length,"))");
 		var allProducers = this.state.producers;
 		var visibleMarkers = [];
 		if(DEBUG) console.log("displayProducers(producers=",producers.length,")");
@@ -314,10 +313,10 @@ class MyMap extends React.Component {
 		this.setState({areasToCheck:areasToCheck, hasAreasToCheck:false});
 		if(DEBUG) console.log("AreasToCheck:",this.state.areasToCheck, "; loadedAreas=",this.state.loadedAreas);
 	}
-	regionChange(elem, aNewRegion) {
-		if(DEBUG) console.log("onRegionChange(",")");
-		// this.setState({diplayMainProducer:false}); // Pb : onMarkerPress() => regionChange() for center the map.
-		// this.checkNeighbouring(elem);
+	regionChange(aNewRegion) {
+		if(DEBUG) console.log("regionChange(",aNewRegion,")");
+		this.setState({diplayMainProducer:false}); // Pb : onMarkerPress() => regionChange() for center the map.
+		this.checkNeighbouring(this);
 	}
 	onMarkerPress(marker) {
 		console.log("onMarkerPress(",marker,"):");
@@ -325,7 +324,7 @@ class MyMap extends React.Component {
 		this.state.navigation.navigate('Producer', {producer:marker, navigation:this.state.navigation});
 	}
 	getMarkerColor(producer) {
-		console.log("getMarkerColor(",producer,")")
+		// console.log("getMarkerColor(",producer,")")
 		var cat = producer.cat;
 		if (cat==null) {
 			return "#000000"; // Black
@@ -349,8 +348,8 @@ class MyMap extends React.Component {
 		  <View style={styles.container}>
 			<MapView style={styles.map}
 					region={this.state.region}
-					onRegionChange={this.regionChange(this)}
-					onMapReady={this.checkNeighbouring(this)}>
+					onRegionChange={() => this.regionChange()}
+					onMapReady={() => this.checkNeighbouring(this)}>
 				{this.state.markers.map((marker, index) => (
 				<Marker
 					key={index}
