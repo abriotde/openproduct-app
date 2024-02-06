@@ -2,31 +2,32 @@ import React from 'react';
 import {StyleSheet, View, ScrollView, Text} from 'react-native';
 import MapView, { Marker} from 'react-native-maps';
 import GetLocation from 'react-native-get-location';
-import * as FileSystem from 'expo-file-system';
-import { Asset } from "expo-asset";
+// import * as FileSystem from 'expo-file-system';
+// import { Asset } from "expo-asset";
+import "../global.js"
+
 // import AssetUtils from "expo-asset-utils";
 // import RNFS from 'react-native-fs';
 import AreasList from "../assets/data/departements.json";
 var noFilter = function (producer) {return true;}
-var filterChar = "a";
 var charFilter = function (producer) {
     if(producer && producer.cat!=null) {
-        return producer.cat.charAt(0)==filterChar;
+        return producer.cat.charAt(0)==global.category_filter;
     } else {
         return false;
     }
 }
 var twoCharFilter = function (producer) {
-    if(producer && producer.cat!=null && producer.cat.charAt(0)==filterChar.charAt(0)) {
-        var subfilter = filterChar.charAt(1); 
+    if(producer && producer.cat!=null && producer.cat.charAt(0)==global.category_filter.charAt(0)) {
+        var subfilter = global.category_filter.charAt(1); 
         for (var i=1; i<producer.cat.length; i++) {
              if (producer.cat.charAt(1)==subfilter) {
-                console.log("twoCharFilter(",producer.cat,") (",filterChar,") => true");
+                console.log("twoCharFilter(",producer.cat,") (",global.category_filter,") => true");
                 return true;
              }      
         }       
     }
-    console.log("twoCharFilter(",producer.cat,") (",filterChar,") => false");
+    console.log("twoCharFilter(",producer.cat,") (",global.category_filter,") => false");
     return false;
 }
 
@@ -56,6 +57,24 @@ class MyMap extends React.Component {
 			navigation:props.navigation
 		};
 		this.centerOnMyPosition ();
+		// On Map focus, check if we changed preferences.
+		props.navigation.addListener('focus', () => {
+			console.log("Focus Map");
+			if (this.state.myfilter!=global.category_filter) {
+				console.log("MyMap : filter ",this.state.myfilter," => ",global.category_filter);
+				var filter = noFilter;
+				let len = global.category_filter==null ? 0 : global.category_filter.length;
+				if (len==0){
+					filter = noFilter;
+				} else if(len==1) {
+					filter = charFilter;
+				} else {
+					filter = twoCharFilter;
+				}
+				this.setState({myfilter:filter});
+				this.displayProducers(this,[]);
+			}
+		});
 	}
 	centerMap (elem, latitude, longitude) {
 		if(DEBUG) console.log("centerMap (",latitude,",", longitude,")");
@@ -125,7 +144,7 @@ class MyMap extends React.Component {
 		this.checkNeighbouring(elem);
 	}
 	displayProducers(elem, producers) {
-		if(DEBUG) console.log("displayProducers(",producers[0].postCode," (",producers.length,"))");
+		if(DEBUG) console.log("displayProducers(",(producers.length>0 ? producers[0].postCode : "")," (",producers.length,"))");
 		var allProducers = this.state.producers;
 		var visibleMarkers = [];
 		for (const producer of producers) {

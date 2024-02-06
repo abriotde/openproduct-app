@@ -1,11 +1,13 @@
-import React, {useEffect, useRef, useState} from 'react';
-import {Text} from 'react-native';
-import {StyleSheet, View} from 'react-native';
+import React from 'react';
+import {Text, StyleSheet, View} from 'react-native';
+
 // https://www.npmjs.com/package/react-native-picker-select
 import RNPickerSelect from 'react-native-picker-select';
+import global, {setCategoryFilter} from '../global';
 
 import categories from '../assets/data/categories.json';
 selectOptions = [];
+selectOptions.push({label:"Aucun filtre.", value:""})
 for (cat of categories) {
 	selectOptions.push({label:cat.text, value:cat.val})
 }
@@ -14,19 +16,17 @@ class CategorySelector extends React.Component {
 		console.log("new CategorySelector");
 		super(props);
 		this.state = {
-			category: ""
 		};
 	}
 	categoryChange(value) {
-		console.log(value);
-		// const [measure, setMeasure] = useState(null);
-		// https://reactnative.dev/docs/direct-manipulation?language=javascript
-		// this.setState({ category: value})
+		console.log(value," <-/-> ",global.category_filter);
+		setCategoryFilter(value);
 	}
 	render() {
 		return (
 			<RNPickerSelect
-				onValueChange={this.categoryChange.bind(this)}
+				value={global.category_filter}
+				onValueChange={value => this.categoryChange(value)}
 				items={selectOptions}
 			/>
 		);
@@ -45,7 +45,7 @@ class Parameters extends React.Component {
 	render() {
 		return (
 			<View style={styles.container}>
-				<Text>Filters</Text>
+				<Text>Filtres:</Text>
 				<CategorySelector />
 			</View>
 		);
