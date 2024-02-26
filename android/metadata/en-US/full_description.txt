@@ -1,0 +1,5 @@
+It is a directory of local producers in France as exhaustiv as possible. There is more than 5000 producers of food and non-food products.
+
+It's Android official version of the website http://openproduct.fr.
+
+This application is entirely Open-Source. It's source code is available on https://github.com/abriotde/openproduct-app. And the server side and the datas are too available on https://github.com/abriotde/ under GPLv3 licence.

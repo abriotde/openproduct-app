@@ -1,0 +1,5 @@
+Il s'agit d'un annuaire de producteurs locaux de France le plus exhaustif possible comportant plus de 5000 producteurs alimentaires et non-alimentaires.
+
+C'est la version Android officielle du site http://openproduct.fr.
+
+Cette application est entièrement OpenSource. Son code source est disponible ici https://github.com/abriotde/openproduct-app. La partie serveur ainsi que les données sont aussi disponible sous licence GPL dans https://github.com/abriotde/.

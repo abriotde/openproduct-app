@@ -351,7 +351,7 @@ class MyMap extends React.Component {
 			return "#fcba03"; // Yellow
 		}
 		if (cat[0]=="P") {
-			return "#fcba03"; // Red
+			return "#e02416"; // Red
 		}
 		if (cat[0]=="J") {
 			return "#0a6b1d"; // Green
